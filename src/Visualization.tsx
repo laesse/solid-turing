@@ -27,7 +27,7 @@ const visualizeWithImages = (instructions: Instructions, moutPoint: HTMLElement)
     [...new Set([...instr.map(([k, v]) => k[0]), ...instr.map(([k, v]) => v[0])])].map((i) => ({
       id: i,
       // label: `q${i - 1}`,
-      image: `/q${i - 1}.png`,
+      image: `solid-turing/q${i - 1}.png`,
       shape: 'circularImage',
 
       color: {
