@@ -28,7 +28,7 @@ const turingRun = (
       writeValue +
       tape.substring(machineState.readWriteHead + 1, tape.length);
 
-    const newReadWriteHead = readWriteHead + (direction == config.LEFT ? 1 : -1);
+    const newReadWriteHead = readWriteHead + (direction == config.RIGHT ? 1 : -1);
 
     machineState.currentState = nextState;
     machineState.tape = newTape;
@@ -63,7 +63,7 @@ const runMachineStepMode = async (
       writeValue +
       tape.substring(machineState().readWriteHead + 1, tape.length);
 
-    const newReadWriteHead = readWriteHead + (direction == config.LEFT ? 1 : -1);
+    const newReadWriteHead = readWriteHead + (direction == config.RIGHT ? 1 : -1);
 
     batch(() => {
       setCurrentInstruction(`${currentState}-${nextState}`);
