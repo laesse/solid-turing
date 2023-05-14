@@ -172,11 +172,11 @@ const App: Component = () => {
     >
       <h1 class="text-3xl font-bold">Turing emulator</h1>
 
-      <div class="w-3/4 flex-grow">
+      <div class="w-3/4 flex-grow flex-shrink">
         <Visualization instructions={instructions} machineState={machineState} />
       </div>
 
-      <div class="flex flex-col items-center justify-center w-2/3 p-4 rounded-md shadow-md bg-slate-300 bg-opacity-50">
+      <div class="flex flex-col items-center justify-center w-2/3 p-4 rounded-md shadow-md bg-slate-300 bg-opacity-50 ">
         <div class="grid grid-cols-2 gap-x-4 mb-4">
           <span class="font-bold">currentState:</span>
           <span>q{machineState().currentState - 1}</span>
