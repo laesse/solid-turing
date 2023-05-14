@@ -5,13 +5,14 @@ import { Instructions } from './machine-parser';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const turingRun = (
+const runMachineRunMode = (
   machineState: MachineState,
   instructions: Instructions
-): [MachineState, number] => {
+): [MachineState, number, string] => {
   let currentInstr;
   let i = 0;
   console.log('running machine in run mode');
+  let lastState = machineState.currentState + '';
   while (
     (currentInstr = instructions.get([
       machineState.currentState,
@@ -30,12 +31,13 @@ const turingRun = (
 
     const newReadWriteHead = readWriteHead + (direction == config.RIGHT ? 1 : -1);
 
+    lastState = machineState.currentState + '';
     machineState.currentState = nextState;
     machineState.tape = newTape;
     machineState.readWriteHead = newReadWriteHead;
     i++;
   }
-  return [machineState, i];
+  return [machineState, i, `${lastState}-${machineState.currentState}`];
 };
 
 const runMachineStepMode = async (
@@ -85,10 +87,10 @@ export const turing = async (
   setCurrentInstruction: Setter<string>
 ) => {
   if (run) {
-    let [newState, i] = turingRun(machineState(), instructions);
-    console.log('finished running machine', newState);
+    let [newState, i, lastInstruction] = runMachineRunMode(machineState(), instructions);
     setMachineState({ ...newState });
     setStepCount(i);
+    setCurrentInstruction(lastInstruction);
   } else {
     await runMachineStepMode(
       instructions,

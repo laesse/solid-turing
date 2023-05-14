@@ -58,10 +58,9 @@ const App: Component = () => {
   const parseMachine = () => {
     setInstructions(parseProgramm(machineState().tape.split('111')[0]));
 
-    let readWriteHead = 15;
+    let readWriteHead = 1;
 
-    const newTape =
-      ' '.repeat(15) + machineState().tape.slice(machineState().tape.indexOf('111') + 3);
+    const newTape = ' ' + machineState().tape.slice(machineState().tape.indexOf('111') + 3);
     setMachineState({ currentState: 1, tape: newTape, readWriteHead });
   };
   const onSpeedChange = (e: Event) => {
@@ -157,8 +156,8 @@ const MachineControl = ({
             <input
               type="text"
               class="ml-3 text-black"
-              value={machineState().tape}
-              onInput={(e) => setTape(e.currentTarget.value)}
+              value={machineState().tape.trim()}
+              onInput={(e) => setTape(' ' + e.currentTarget.value)}
             />
           </label>
           <label class="m-3">
