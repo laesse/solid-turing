@@ -2,36 +2,8 @@ import { Accessor, Component, For, Setter, Show, createEffect, createSignal } fr
 import className from 'classnames';
 import { HashMap } from './hashMap';
 import { Visualization } from './Visualization';
-
-const machine =
-  '0100100000000000001001011010101010110000000000000101000000000000010101100000000000001000100010010011000000000000010010001001001100010100010100110001001000010010110000100001000010000101100001010000010000100110000100100100010110000010010000001001001100000100001000001000010011000000101000000010000010110000001000001000000100000100110000001000100000000000010001011000000010000010000000100000101100000001001000000001001011000000001010000000010101100000000100001000000001000010110000000010010000000001001011000000000101000000000101011000000000100010000000000101001100000000001001000000000001001001100000000001010000000000101001100000000000100100000010010011000000000001000010000000000010000100110000000000010100000000000101001100000000000010010000100101100000000000010000010000000000001010111';
-// set to true if the machine is for multiplication
-// if set to true the app asks for 2 inputs to multiply and at the end assumes the result is on the tape
-const multiplicationMachine = true;
-
-export const LEFT = 1;
-export const RIGHT = 2;
-
-const TAPE_VALUE_ENCODING = ['0', '1', ' ', 'X', 'Y'] as const;
-
-export type Instructions = ReturnType<typeof parseProgramm>;
-
-const parseProgramm = (tape: string) => {
-  return new HashMap(
-    tape.split('11').map((transition) => {
-      const tranitionParts = transition.split('1').filter((a) => a);
-      if (tranitionParts.length != 5) throw Error(`invalid transition, ${transition}`);
-      return [
-        [tranitionParts[0].length, TAPE_VALUE_ENCODING[tranitionParts[1].length - 1]],
-        [
-          tranitionParts[2].length,
-          TAPE_VALUE_ENCODING[tranitionParts[3].length - 1],
-          tranitionParts[4].length,
-        ],
-      ] as const;
-    })
-  );
-};
+import config from './config';
+import { Instructions, parseProgramm } from './machine-parser';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -45,8 +17,9 @@ const turingRun = (
   while (
     (currentInstr = instructions.get([
       machineState.currentState,
-      (machineState.tape.at(machineState.readWriteHead) as (typeof TAPE_VALUE_ENCODING)[number]) ||
-        ' ',
+      (machineState.tape.at(
+        machineState.readWriteHead
+      ) as (typeof config.TAPE_VALUE_ENCODING)[number]) || ' ',
     ])) !== undefined
   ) {
     const [nextState, writeValue, direction] = currentInstr;
@@ -57,7 +30,7 @@ const turingRun = (
       writeValue +
       tape.substring(machineState.readWriteHead + 1, tape.length);
 
-    const newReadWriteHead = readWriteHead + (direction == LEFT ? 1 : -1);
+    const newReadWriteHead = readWriteHead + (direction == config.LEFT ? 1 : -1);
 
     machineState.currentState = nextState;
     machineState.tape = newTape;
@@ -80,7 +53,7 @@ const runMachineStepMode = async (
       machineState().currentState,
       (machineState().tape.at(
         machineState().readWriteHead
-      ) as (typeof TAPE_VALUE_ENCODING)[number]) || ' ',
+      ) as (typeof config.TAPE_VALUE_ENCODING)[number]) || ' ',
     ])) !== undefined
   ) {
     const [nextState, writeValue, direction] = currentInstr;
@@ -91,7 +64,7 @@ const runMachineStepMode = async (
       writeValue +
       tape.substring(machineState().readWriteHead + 1, tape.length);
 
-    const newReadWriteHead = readWriteHead + (direction == LEFT ? 1 : -1);
+    const newReadWriteHead = readWriteHead + (direction == config.LEFT ? 1 : -1);
 
     setMachineState({ currentState: nextState, tape: newTape, readWriteHead: newReadWriteHead });
     inc();
@@ -126,7 +99,7 @@ const turing = async (
   if (machineState().currentState == 2) {
     setBingoBöp({
       success: 'bingo',
-      resultOfCalculation: multiplicationMachine
+      resultOfCalculation: config.multiplicationMachine
         ? machineState().tape.substring(machineState().readWriteHead).length
         : undefined,
     });
@@ -135,13 +108,14 @@ const turing = async (
   }
 };
 
-type MachineState = { currentState: number; tape: string; readWriteHead: number };
+export type MachineState = { currentState: number; tape: string; readWriteHead: number };
 
-type BingoBöp = { success: 'bingo' | 'böp'; resultOfCalculation?: number };
+export type BingoBöp = { success: 'bingo' | 'böp'; resultOfCalculation?: number };
+
 const App: Component = () => {
   const [machineState, setMachineState] = createSignal<MachineState>({
     currentState: 1,
-    tape: machine + '00100',
+    tape: config.machine + '00100',
     readWriteHead: 0,
   });
   const [bingoBöp, setBingoBöp] = createSignal<BingoBöp>();
@@ -223,7 +197,7 @@ const App: Component = () => {
         machineState={machineState}
         setTape={(tape) => setMachineState((s) => ({ ...s, tape }))}
       />
-      <Show when={bingoBöp()?.resultOfCalculation !== undefined && multiplicationMachine}>
+      <Show when={bingoBöp()?.resultOfCalculation !== undefined && config.multiplicationMachine}>
         <span class="text-xl font-bold">
           the calculation result is: {bingoBöp()?.resultOfCalculation}
         </span>

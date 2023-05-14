@@ -1,6 +1,7 @@
 import { DataSet, Edge, Network } from 'vis-network/standalone';
-import { type Instructions, RIGHT } from './App';
 import { Accessor, createEffect, createSignal } from 'solid-js';
+import { type Instructions } from './machine-parser';
+import config from './config';
 
 const visualize = (instructions: Instructions) => {
   const instr = instructions.entries();
@@ -21,7 +22,7 @@ const visualize = (instructions: Instructions) => {
       to: v[0],
       arrows: 'to',
       label: `${k[1] === ' ' ? '_' : k[1]}/${v[1] === ' ' ? '_' : v[1]},${
-        v[2] == RIGHT ? 'R' : 'L'
+        v[2] == config.RIGHT ? 'R' : 'L'
       }`,
     }))
     .reduce((acc, current) => {
