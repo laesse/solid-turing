@@ -21,7 +21,7 @@ A transition comprises several parts separated by the marker "1":
 5. the direction to move ("0" for right, "00" for left)
 
 Please note the following:
-- The mapping of unary values to symbols is defined in TAPE_VALUE_ENCODING within src/config.ts and can be customized to suit your requirements.
+- The mapping of unary values to symbols is defined in `TAPE_VALUE_ENCODING` within `src/config.ts` and can be customized to suit your requirements.
 - The start state is denoted as q0, while the end state is represented as q1.
 
 #### Example
