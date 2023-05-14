@@ -10,4 +10,5 @@ export default defineConfig({
     target: 'esnext',
   },
   publicDir: 'public',
+  base: '/solid-turing',
 });
