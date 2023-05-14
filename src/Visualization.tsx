@@ -1,7 +1,10 @@
-import { DataSet, Edge, Network } from 'vis-network/standalone';
 import { Accessor, createEffect, createSignal } from 'solid-js';
-import { type Instructions } from './machine-parser';
+import type { Instructions } from './machine-parser';
 import config from './config';
+import type { Edge } from 'vis-network/standalone';
+const { DataSet } = await import('vis-data/peer');
+const { Network } = await import('vis-network/peer');
+import 'vis-network/styles/vis-network.css';
 
 const visualize = (instructions: Instructions) => {
   const instr = instructions.entries();
@@ -11,7 +14,8 @@ const visualize = (instructions: Instructions) => {
     [...new Set([...instr.map(([k, v]) => k[0]), ...instr.map(([k, v]) => v[0])])].map((i) => ({
       id: i,
       label: `q${i - 1}`,
-      // image: `src/assets/states/q${i - 1}2.svg`,
+      //  image: `/q${i - 1}.svg`,
+      //  shape: 'image',
     }))
   );
 
@@ -68,7 +72,7 @@ type Props = {
   machineState: Accessor<{ currentState: number }>;
 };
 
-export const Visualization = ({ instructions, machineState }: Props) => {
+const Visualization = ({ instructions, machineState }: Props) => {
   const [updateNode, setUpdateNode] = createSignal<(id: number) => void>();
   createEffect(() => {
     const i = instructions();
@@ -85,8 +89,11 @@ export const Visualization = ({ instructions, machineState }: Props) => {
   });
   return (
     <>
-      {updateNode() ? null : 'press parse machine in order to load the machine'}
+      {updateNode() ? null : (
+        <div class="text-center">press parse machine in order to load the machine</div>
+      )}
       <div id="vis-root" class="h-full flex items-left w-full"></div>
     </>
   );
 };
+export default Visualization;

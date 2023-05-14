@@ -1,7 +1,6 @@
-import { Accessor, Component, For, Setter, Show, createEffect, createSignal } from 'solid-js';
+import { Accessor, Component, For, Setter, Show, createSignal, lazy } from 'solid-js';
 import className from 'classnames';
-import { HashMap } from './hashMap';
-import { Visualization } from './Visualization';
+const Visualization = lazy(() => import('./Visualization'));
 import config from './config';
 import { Instructions, parseProgramm } from './machine-parser';
 
@@ -173,35 +172,41 @@ const App: Component = () => {
     >
       <h1 class="text-3xl font-bold">Turing emulator</h1>
 
-      <div class="h-3/4 w-3/4">
+      <div class="w-3/4 flex-grow">
         <Visualization instructions={instructions} machineState={machineState} />
       </div>
-      <div class="flex flex-row gap-2">
-        <span>currentState: q{machineState().currentState - 1}</span>
-        <span>read write head: {machineState().readWriteHead}</span>
-        <span>step count: {steps()}</span>
-      </div>
 
-      <div class="flex flex-row gap-2 mt-2">
+      <div class="flex flex-col items-center justify-center w-2/3 p-4 rounded-md shadow-md bg-slate-300 bg-opacity-50">
+        <div class="grid grid-cols-2 gap-x-4 mb-4">
+          <span class="font-bold">currentState:</span>
+          <span>q{machineState().currentState - 1}</span>
+          <span class="font-bold">read write head:</span>
+          <span> {machineState().readWriteHead}</span>
+          <span class="font-bold">step count:</span>
+          <span> {steps()}</span>
+        </div>
+
         <Tape tape={slicedTape} />
+        <div class="">
+          <MachineControl
+            instructions={instructions}
+            machineRunning={machineRunning}
+            startTuring={startTuring}
+            parseMachine={parseMachine}
+            onSpeedChange={onSpeedChange}
+            runMode={runMode}
+            setRunMode={setRunMode}
+            machineDone={machineDone}
+            machineState={machineState}
+            setTape={(tape) => setMachineState((s) => ({ ...s, tape }))}
+          />
+        </div>
+        <Show when={bingoBöp()?.resultOfCalculation !== undefined && config.multiplicationMachine}>
+          <span class="text-xl font-bold">
+            the calculation result is: {bingoBöp()?.resultOfCalculation}
+          </span>
+        </Show>
       </div>
-      <MachineControl
-        instructions={instructions}
-        machineRunning={machineRunning}
-        startTuring={startTuring}
-        parseMachine={parseMachine}
-        onSpeedChange={onSpeedChange}
-        runMode={runMode}
-        setRunMode={setRunMode}
-        machineDone={machineDone}
-        machineState={machineState}
-        setTape={(tape) => setMachineState((s) => ({ ...s, tape }))}
-      />
-      <Show when={bingoBöp()?.resultOfCalculation !== undefined && config.multiplicationMachine}>
-        <span class="text-xl font-bold">
-          the calculation result is: {bingoBöp()?.resultOfCalculation}
-        </span>
-      </Show>
     </div>
   );
 };
@@ -246,6 +251,7 @@ const MachineControl = ({
           initial tape
           <input
             type="text"
+            class="ml-3"
             value={machineState().tape}
             onInput={(e) => setTape(e.currentTarget.value)}
           />

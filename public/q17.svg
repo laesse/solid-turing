@@ -1,0 +1,13 @@
+<svg width="275" height="275" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" overflow="hidden">
+	<defs>
+		<clipPath id="clip0">
+			<rect x="3927" y="2071" width="275" height="275" />
+		</clipPath>
+	</defs>
+	<g clip-path="url(#clip0)" transform="translate(-3927 -2071)">
+		<path d="M3937 2209C3937 2137.2 3995.2 2079 4067 2079 4138.8 2079 4197 2137.2 4197 2209 4197 2280.8 4138.8 2339 4067 2339 3995.2 2339 3937 2280.8 3937 2209Z" stroke="#000000" stroke-width="10.3125" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="8" stroke-opacity="1" fill="none" fill-rule="evenodd" />
+		<text fill="#000000" fill-opacity="1" font-family="Calibri,Calibri_MSFontService,sans-serif" font-style="normal" font-variant="normal" font-weight="400" font-stretch="normal" font-size="83" text-anchor="start" direction="ltr" writing-mode="lr-tb" unicode-bidi="normal" text-decoration="none" transform="matrix(1 0 0 1 4003.1 2237)">
+			q17
+		</text>
+	</g>
+</svg>
