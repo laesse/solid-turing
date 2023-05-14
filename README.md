@@ -8,6 +8,8 @@ This app was developed for my theoretical Computer Science class. It is a univer
 2. run `pnpm install && pnpm dev`
 3. Open your browser and go to [localhost:3000/solid-turing](http://localhost:3000/solid-turing)
 
+if you just want to use the multiplication machine you can do this [here](https://laesse.github.io/solid-turing/)
+
 ## Running other machines
 The task was to build a Turing machine for multiplication, which is now included in the app. The multiplication function is directly programmed into the application. If you want to make changes to the machine's behavior, simply modify the `machine` variable in the `src/config.ts` file. In the same file you can also change default tape value.
 
