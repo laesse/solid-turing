@@ -163,44 +163,40 @@ const App: Component = () => {
     setSpeed(Math.abs(parseInt(target.value) - 10) * 100);
   };
   return (
-    <div
-      class={className('h-[100vh] p-4 flex flex-col items-center', {
-        'bg-gradient-to-r from-green-400 to-emerald-500 ': bingoBöp()?.success === 'bingo',
-        'bg-red-500': bingoBöp()?.success === 'böp',
-        'bg-gradient-to-r from-teal-400 to-yellow-200': bingoBöp() === undefined,
-      })}
-    >
-      <h1 class="text-3xl font-bold">Turing emulator</h1>
+    <div class="h-screen flex flex-col items-center text-slate-50 overflow-hidden bg-slate-900">
+      <div class="flex flex-col items-center w-2/3 h-full shadow-md bg-slate-600 ">
+        <h1 class="text-4xl font-bold m-2">Turing emulator</h1>
 
-      <div class="w-3/4 flex-grow flex-shrink">
-        <Visualization instructions={instructions} machineState={machineState} />
-      </div>
-
-      <div class="flex flex-col items-center justify-center w-2/3 p-4 rounded-md shadow-md bg-slate-300 bg-opacity-50 ">
-        <div class="grid grid-cols-2 gap-x-4 mb-4">
-          <span class="font-bold">currentState:</span>
-          <span>q{machineState().currentState - 1}</span>
-          <span class="font-bold">read write head:</span>
-          <span> {machineState().readWriteHead}</span>
-          <span class="font-bold">step count:</span>
-          <span> {steps()}</span>
+        <div class="w-full flex-grow flex-shrink">
+          <Visualization instructions={instructions} machineState={machineState} />
         </div>
 
-        <Tape tape={slicedTape} />
-        <div class="">
-          <MachineControl
-            instructions={instructions}
-            machineRunning={machineRunning}
-            startTuring={startTuring}
-            parseMachine={parseMachine}
-            onSpeedChange={onSpeedChange}
-            runMode={runMode}
-            setRunMode={setRunMode}
-            machineDone={machineDone}
-            machineState={machineState}
-            setTape={(tape) => setMachineState((s) => ({ ...s, tape }))}
-            bingoBöp={bingoBöp}
-          />
+        <div class="flex flex-col items-center justify-center w-full p-4 rounded-md bg-slate-800 shadow-md ">
+          <div class="grid grid-cols-2 gap-x-4 mb-4">
+            <span class="font-bold">currentState:</span>
+            <span>q{machineState().currentState - 1}</span>
+            <span class="font-bold">read write head:</span>
+            <span> {machineState().readWriteHead}</span>
+            <span class="font-bold">step count:</span>
+            <span> {steps()}</span>
+          </div>
+
+          <Tape tape={slicedTape} />
+          <div class="">
+            <MachineControl
+              instructions={instructions}
+              machineRunning={machineRunning}
+              startTuring={startTuring}
+              parseMachine={parseMachine}
+              onSpeedChange={onSpeedChange}
+              runMode={runMode}
+              setRunMode={setRunMode}
+              machineDone={machineDone}
+              machineState={machineState}
+              setTape={(tape) => setMachineState((s) => ({ ...s, tape }))}
+              bingoBöp={bingoBöp}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -238,7 +234,7 @@ const MachineControl = ({
     <div class="flex flex-col gap-1 mt-3 h-20 justify-center">
       <Show when={instructions() === undefined && !machineDone()}>
         <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          class="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
           onClick={parseMachine}
         >
           parse machine
@@ -250,7 +246,7 @@ const MachineControl = ({
             initial tape
             <input
               type="text"
-              class="ml-3"
+              class="ml-3 text-black"
               value={machineState().tape}
               onInput={(e) => setTape(e.currentTarget.value)}
             />
@@ -267,7 +263,7 @@ const MachineControl = ({
         </div>
 
         <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          class="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
           onClick={startTuring}
         >
           Start machine
@@ -292,8 +288,23 @@ const MachineControl = ({
           <div class="text-xl">running machine in run mode 🚀</div>
         )}
       </Show>
-      <Show when={bingoBöp()?.resultOfCalculation !== undefined && config.multiplicationMachine}>
-        <span class="text-xl font-bold">calculation result: {bingoBöp()?.resultOfCalculation}</span>
+      <Show when={bingoBöp()?.success === 'bingo'}>
+        <div class="bg-emerald-800 h-full  flex flex-col items-center justify-center px-20 rounded-md shadow-sm ">
+          <span class="text-xl">Bingo! 🎉</span>
+          <Show
+            when={bingoBöp()?.resultOfCalculation !== undefined && config.multiplicationMachine}
+          >
+            <span class="text-xl">
+              calculation result:
+              <span class="text-xl ml-2 font-bold">{bingoBöp()?.resultOfCalculation}</span>
+            </span>
+          </Show>
+        </div>
+      </Show>
+      <Show when={bingoBöp()?.success === 'böp'}>
+        <div class="bg-red-800 h-full  flex flex-col items-center justify-center px-20 rounded-md shadow-sm ">
+          <span class="text-xl">böp! </span>
+        </div>
       </Show>
     </div>
   );
@@ -304,17 +315,17 @@ const Tape = ({ tape: tapeStr }: { tape: Accessor<string> }) => {
     <div class="flex">
       <For each={tapeStr().split('').slice(0, 15)}>
         {(item) => (
-          <div class="bg-green-300 h-10 w-10 border-y-black border-l-black border-r-0 border flex place-items-center justify-center">
+          <div class="bg-sky-900 h-12 w-10 border-y-black border-l-black border-r-0 border flex place-items-center justify-center">
             {item == ' ' ? '_' : item}
           </div>
         )}
       </For>
-      <div class="bg-blue-400 h-10 w-10 border-black border text-center  flex place-items-center justify-center">
+      <div class="bg-fuchsia-900 h-12 w-10 border-black border text-center  flex place-items-center justify-center">
         {tapeStr().split('')[15] === ' ' ? '_' : tapeStr().split('')[15]}
       </div>
       <For each={tapeStr().split('').slice(16)}>
         {(item) => (
-          <div class="bg-green-300 h-10 w-10 border-r-black border-l-0 border-y-black border text-center  flex place-items-center justify-center">
+          <div class="bg-sky-900 h-12 w-10 border-r-black border-l-0 border-y-black border text-center  flex place-items-center justify-center">
             {item == ' ' ? '_' : item}
           </div>
         )}
