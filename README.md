@@ -1,6 +1,7 @@
 
 # Turing Machine Emulator
 This app was developed for THIN. It is a universal turing machine emulator. It is a web app that allows the user to visualize and run a turing machine.
+![image](https://github.com/laesse/solid-turing/assets/40475367/9a1a17f0-d042-4513-b647-ce81745f454a)
 
 ## How to use
 1. Clone the repository
