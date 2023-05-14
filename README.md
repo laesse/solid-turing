@@ -1,6 +1,6 @@
 
 # Turing Machine Emulator
-This app was developed for my theoretical Computer Science class. It is a universal turing machine emulator. It is a web app that allows the user to visualize and run a turing machine.
+Designed for my theoretical Computer Science class, this web app serves as a universal Turing machine emulator. It allows users to visualize and run Turing machines.
 ![image](https://github.com/laesse/solid-turing/assets/40475367/9a1a17f0-d042-4513-b647-ce81745f454a)
 
 ## How to use
