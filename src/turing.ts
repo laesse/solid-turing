@@ -1,4 +1,4 @@
-import { Accessor, Setter } from 'solid-js';
+import { Accessor, Setter, batch } from 'solid-js';
 import { BingoBöp, MachineState } from './App';
 import config from './config';
 import { Instructions } from './machine-parser';
@@ -43,7 +43,8 @@ const runMachineStepMode = async (
   machineState: Accessor<MachineState>,
   setMachineState: Setter<MachineState>,
   inc: () => void,
-  getSpeed: Accessor<number>
+  getSpeed: Accessor<number>,
+  setCurrentInstruction: Setter<string>
 ) => {
   let currentInstr;
   while (
@@ -55,7 +56,7 @@ const runMachineStepMode = async (
     ])) !== undefined
   ) {
     const [nextState, writeValue, direction] = currentInstr;
-    const { tape, readWriteHead } = machineState();
+    const { currentState, tape, readWriteHead } = machineState();
 
     const newTape =
       tape.substring(0, readWriteHead) +
@@ -64,8 +65,11 @@ const runMachineStepMode = async (
 
     const newReadWriteHead = readWriteHead + (direction == config.LEFT ? 1 : -1);
 
-    setMachineState({ currentState: nextState, tape: newTape, readWriteHead: newReadWriteHead });
-    inc();
+    batch(() => {
+      setCurrentInstruction(`${currentState}-${nextState}`);
+      setMachineState({ currentState: nextState, tape: newTape, readWriteHead: newReadWriteHead });
+      inc();
+    });
     await sleep(getSpeed());
   }
 };
@@ -77,7 +81,8 @@ export const turing = async (
   instructions: Instructions,
   getSpeed: Accessor<number>,
   run: boolean,
-  setStepCount: Setter<number>
+  setStepCount: Setter<number>,
+  setCurrentInstruction: Setter<string>
 ) => {
   if (run) {
     let [newState, i] = turingRun(machineState(), instructions);
@@ -90,7 +95,8 @@ export const turing = async (
       machineState,
       setMachineState,
       () => setStepCount((i) => i + 1),
-      getSpeed
+      getSpeed,
+      setCurrentInstruction
     );
   }
 

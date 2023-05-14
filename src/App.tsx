@@ -23,6 +23,7 @@ const App: Component = () => {
 
   const [runMode, setRunMode] = createSignal<boolean>(false);
   const [machineRunning, setMachineRunning] = createSignal<boolean>(false);
+  const [currentInstruction, setCurrentInstruction] = createSignal<string>('-1-1');
 
   const slicedTape = () => {
     const slicedTape = ('_'.repeat(15) + machineState().tape + '_'.repeat(15)).slice(
@@ -38,9 +39,16 @@ const App: Component = () => {
     if (!instr) throw new Error('no instructions');
 
     setMachineRunning(true);
-    turing(machineState, setMachineState, setBingoBöp, instr, speed, runMode(), setSteps).then(() =>
-      setMachineRunning(false)
-    );
+    turing(
+      machineState,
+      setMachineState,
+      setBingoBöp,
+      instr,
+      speed,
+      runMode(),
+      setSteps,
+      setCurrentInstruction
+    ).then(() => setMachineRunning(false));
   };
 
   const machineDone = () => {
@@ -66,7 +74,11 @@ const App: Component = () => {
         <h1 class="text-4xl font-bold m-2">Turing emulator</h1>
 
         <div class="w-full flex-grow flex-shrink">
-          <Visualization instructions={instructions} machineState={machineState} />
+          <Visualization
+            instructions={instructions}
+            machineState={machineState}
+            currentInstruction={currentInstruction}
+          />
         </div>
 
         <div class="flex flex-col items-center justify-center w-full p-4 rounded-md bg-slate-800 shadow-md ">
@@ -80,7 +92,7 @@ const App: Component = () => {
           </div>
 
           <Tape tape={slicedTape} />
-          <div class="">
+          <div>
             <MachineControl
               instructions={instructions}
               machineRunning={machineRunning}
