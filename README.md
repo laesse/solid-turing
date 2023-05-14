@@ -8,10 +8,10 @@ Designed for my theoretical Computer Science class, this web app serves as a uni
 2. run `pnpm install && pnpm dev`
 3. Open your browser and go to [localhost:3000/solid-turing](http://localhost:3000/solid-turing)
 
-if you just want to use the multiplication machine you can do this [here](https://laesse.github.io/solid-turing/)
+If you just want to use the multiplication machine you can do this [here](https://laesse.github.io/solid-turing/)
 
 ## Running other machines
-The task was to build a Turing machine for multiplication, which is now included in the app. The multiplication function is directly programmed into the application. If you want to make changes to the machine's behavior, simply modify the `machine` variable in the `src/config.ts` file. In the same file you can also change default tape value.
+The multiplication machine is directly programmed into the application. If you want to run your own machine, simply modify the `machine` variable in the `src/config.ts` file. In the same file you can also change default tape value.
 
 ### Encoding your machine
 The machine is encoded in unary format, where each transition is separated by the marker "11"
@@ -26,16 +26,8 @@ Please note the following:
 - The mapping of unary values to symbols is defined in `TAPE_VALUE_ENCODING` within `src/config.ts` and can be customized to suit your requirements.
 - The start state is denoted as q0, while the end state is represented as q1.
 
-#### Example
-
-**our multiplication machine:**
-
-```text
-0100100000000000001001011010101010110000000000000101000000000000010101100000000000001000100010010011000000000000010010001001001100010100010100110001001000010010110000100001000010000101100001010000010000100110000100100100010110000010010000001001001100000100001000001000010011000000101000000010000010110000001000001000000100000100110000001000100000000000010001011000000010000010000000100000101100000001001000000001001011000000001010000000010101100000000100001000000001000010110000000010010000000001001011000000000101000000000101011000000000100010000000000101001100000000001001000000000001001001100000000001010000000000101001100000000000100100000010010011000000000001000010000000000010000100110000000000010100000000000101001100000000000010010000100101100000000000010000010000000000001010
-```
-
 ### FLACI parser
-If you don't want to encode the turing machine by hand, you can use the [FLACI](https://flaci.com/home/) parser.
+If you don't want to encode the turing machine by hand, you can use the [FLACI](https://flaci.com/home/) parser I have written as a byproduct of this excercise.
 It is specifically designed to parse the JSON savefiles from FLACI. To use the parser, follow these steps:
 
 1. Run the command `deno run --allow-read parse-flaci-turing.ts --file [path_to_your_machine_from_flaci].json`.
