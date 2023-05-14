@@ -199,13 +199,9 @@ const App: Component = () => {
             machineDone={machineDone}
             machineState={machineState}
             setTape={(tape) => setMachineState((s) => ({ ...s, tape }))}
+            bingoBöp={bingoBöp}
           />
         </div>
-        <Show when={bingoBöp()?.resultOfCalculation !== undefined && config.multiplicationMachine}>
-          <span class="text-xl font-bold">
-            the calculation result is: {bingoBöp()?.resultOfCalculation}
-          </span>
-        </Show>
       </div>
     </div>
   );
@@ -222,6 +218,7 @@ type MachineControlProps = {
   machineDone: () => boolean;
   machineState: Accessor<MachineState>;
   setTape: (tape: string) => void;
+  bingoBöp: Accessor<BingoBöp | undefined>;
 };
 
 const MachineControl = ({
@@ -235,9 +232,10 @@ const MachineControl = ({
   machineDone,
   machineState,
   setTape,
+  bingoBöp,
 }: MachineControlProps) => {
   return (
-    <div class="flex flex-col gap-2 mt-3">
+    <div class="flex flex-col gap-1 mt-3 h-20 justify-center">
       <Show when={instructions() === undefined && !machineDone()}>
         <button
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -247,35 +245,38 @@ const MachineControl = ({
         </button>
       </Show>
       <Show when={instructions() !== undefined && !machineRunning() && !machineDone()}>
-        <label>
-          initial tape
-          <input
-            type="text"
-            class="ml-3"
-            value={machineState().tape}
-            onInput={(e) => setTape(e.currentTarget.value)}
-          />
-        </label>
+        <div class="mb-2">
+          <label>
+            initial tape
+            <input
+              type="text"
+              class="ml-3"
+              value={machineState().tape}
+              onInput={(e) => setTape(e.currentTarget.value)}
+            />
+          </label>
+          <label class="m-3">
+            Run mode
+            <input
+              type="checkbox"
+              class="ml-3"
+              value={runMode() ? 'true' : 'false'}
+              onChange={() => setRunMode((r) => !r)}
+            />
+          </label>
+        </div>
+
         <button
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={startTuring}
         >
           Start machine
         </button>
-        <label>
-          Run mode
-          <input
-            type="checkbox"
-            class="m-3"
-            value={runMode() ? 'true' : 'false'}
-            onChange={() => setRunMode((r) => !r)}
-          />
-        </label>
       </Show>
       <Show when={machineRunning() && instructions() !== undefined}>
         {runMode() === false ? (
           <>
-            <label class="mr-2">
+            <label class="mr-2 flex justify-center">
               Change speed
               <input
                 type="range"
@@ -290,6 +291,9 @@ const MachineControl = ({
         ) : (
           <div class="text-xl">running machine in run mode 🚀</div>
         )}
+      </Show>
+      <Show when={bingoBöp()?.resultOfCalculation !== undefined && config.multiplicationMachine}>
+        <span class="text-xl font-bold">calculation result: {bingoBöp()?.resultOfCalculation}</span>
       </Show>
     </div>
   );
